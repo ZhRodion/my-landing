@@ -1,3 +1,6 @@
+'use client'
+
+import { motion } from 'framer-motion'
 import Image from 'next/image'
 
 const textData = [
@@ -12,13 +15,23 @@ const textData = [
 ]
 
 export default function Hero() {
+	const variants = {
+		hidden: { opacity: 0, x: 50 },
+		visible: { opacity: 1, x: 0 },
+	}
 	return (
-		<section className='hero'>
+		<section className='hero pt-[120px]'>
 			<div className='container-wrapper'>
 				<h1 className='visually-hidden'>
 					Rodion Frontend Developer landing page
 				</h1>
-				<div className='flex justify-between gap-3'>
+				<motion.div
+					transition={{ duration: 0.8, ease: 'easeInOut' }}
+					initial='hidden'
+					animate='visible'
+					variants={variants}
+					className='flex justify-between gap-3'
+				>
 					<div className='w-full max-w-[392px] h-[511px] relative'>
 						<Image
 							src='/images/hero/rodion.jpg'
@@ -38,7 +51,7 @@ export default function Hero() {
 							))}
 						</ul>
 					</div>
-				</div>
+				</motion.div>
 			</div>
 		</section>
 	)
