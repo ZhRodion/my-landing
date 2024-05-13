@@ -13,10 +13,6 @@ const textData: textDataProps[] = [
 		id: 1,
 		text: 'I am a Frontend Developer with over 4 years of commercial development experience. My expertise includes developing intricate user interfaces, enhancing web application performance, and implementing innovative functional capabilities. My objective is to continuously evolve and stay abreast of the latest technologies and methodologies in web development.',
 	},
-	{
-		id: 2,
-		text: 'I am a Frontend Developer with over 4 years of commercial development experience. My expertise includes developing intricate ',
-	},
 ]
 
 export default function Hero() {
