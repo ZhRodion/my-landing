@@ -102,6 +102,7 @@ export default function TechnologySlider() {
 						src={picSrc}
 						width={80}
 						height={80}
+						loading='eager'
 						alt={picAlt}
 					/>
 				</SwiperSlide>

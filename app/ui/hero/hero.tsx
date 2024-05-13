@@ -38,6 +38,8 @@ export default function Hero() {
 							className='object-cover'
 							src='/images/hero/rodion.jpg'
 							fill={true}
+							priority={true}
+							loading='eager'
 							alt='.Rodions Photo'
 						/>
 					</div>
