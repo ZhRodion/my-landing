@@ -19,8 +19,9 @@ export default function Hero() {
 		hidden: { opacity: 0, x: 50 },
 		visible: { opacity: 1, x: 0 },
 	}
+
 	return (
-		<section className='hero pt-[120px]'>
+		<section className='hero sm:pt-[67px] s:pt-0'>
 			<div className='container-wrapper'>
 				<h1 className='visually-hidden'>
 					Rodion Frontend Developer landing page
@@ -30,21 +31,22 @@ export default function Hero() {
 					initial='hidden'
 					animate='visible'
 					variants={variants}
-					className='flex justify-between gap-3'
+					className='flex justify-between gap-3 lg:flex-row s:flex-col s:items-center'
 				>
-					<div className='w-full max-w-[392px] h-[511px] relative'>
+					<div className='w-full max-w-[392px] relative lg:h-[511px] s:h-[438px]'>
 						<Image
+							className='object-cover'
 							src='/images/hero/rodion.jpg'
 							fill={true}
 							alt='.Rodions Photo'
 						/>
 					</div>
-					<div className='w-full max-w-[818px] text-right'>
-						<h2 className='text-blue text-40'>Rodion Zherdev</h2>
-						<ul className='w-full pt-9 flex flex-col gap-[60px]'>
+					<div className='w-full max-w-[818px] lg:text-right s:text-center'>
+						<h2 className='text-blue xl:text-40 sm:text-36'>Rodion Zherdev</h2>
+						<ul className='w-full flex flex-col xl:pt-9 xl:gap-[60px] s:pt-6 s:gap-6'>
 							{textData.map(({ id, text }) => (
 								<li key={id}>
-									<p className='text-darkBlue text-24 leading-relaxed'>
+									<p className='text-darkBlue leading-relaxed xxl:text-24 lg:text-20 md:text-18 s:text-14'>
 										{text}
 									</p>
 								</li>

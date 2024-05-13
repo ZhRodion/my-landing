@@ -9,7 +9,7 @@ export default function Technology() {
 		visible: { opacity: 1, x: 0 },
 	}
 	return (
-		<section className='technology pt-[164px]'>
+		<section className='technology xl:py-[108px] lg:py-16 s:py-10'>
 			<div className='container-wrapper'>
 				<motion.div
 					transition={{ duration: 0.8, ease: 'easeInOut' }}
@@ -17,7 +17,9 @@ export default function Technology() {
 					animate='visible'
 					variants={variants}
 				>
-					<h2 className='text-blue text-40 text-center'>Technology stack</h2>
+					<h2 className='text-blue text-center xl:text-40 sm:text-36'>
+						Technology stack
+					</h2>
 					<TechnologySlider />
 				</motion.div>
 			</div>

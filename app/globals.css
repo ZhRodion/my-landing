@@ -9,7 +9,7 @@
 }
 
 .container-wrapper {
-	@apply max-w-[1300px] w-full px-5 mx-auto relative;
+	@apply max-w-[1300px] w-full mx-auto relative lg:px-5 s:px-[15px];
 }
 
 .visually-hidden {

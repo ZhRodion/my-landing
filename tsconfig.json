@@ -26,6 +26,7 @@
         "./*",
         "./app/ui/*",
         "./public/svgs/*",
+        "./public/images/*"
       ]
     }
   },
@@ -34,7 +35,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "./public/svgs/*"
   ],
   "exclude": [
     "node_modules"
