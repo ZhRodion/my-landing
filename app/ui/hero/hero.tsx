@@ -3,7 +3,12 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 
-const textData = [
+type textDataProps = {
+	id: number
+	text: string
+}
+
+const textData: textDataProps[] = [
 	{
 		id: 1,
 		text: 'I am a Frontend Developer with over 4 years of commercial development experience. My expertise includes developing intricate user interfaces, enhancing web application performance, and implementing innovative functional capabilities. My objective is to continuously evolve and stay abreast of the latest technologies and methodologies in web development.',
@@ -44,7 +49,7 @@ export default function Hero() {
 						/>
 					</div>
 					<div className='w-full max-w-[818px] lg:text-right s:text-center'>
-						<h2 className='text-blue xl:text-40 sm:text-36'>Rodion Zherdev</h2>
+						<h2 className='text-blue xl:text-40 s:text-36'>Rodion Zherdev</h2>
 						<ul className='w-full flex flex-col xl:pt-9 xl:gap-[60px] s:pt-6 s:gap-6'>
 							{textData.map(({ id, text }) => (
 								<li key={id}>

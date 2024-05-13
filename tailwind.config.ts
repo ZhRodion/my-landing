@@ -17,6 +17,8 @@ const config: Config = {
 				blue: '#2091F2',
 				blueBorder: '#4cacff',
 				darkBlue: '#10316B',
+			},
+			boxShadow: {
 				buttonShadow: '0 4px 20px 0 rgba(0, 0, 0, 0.4)',
 			},
 			fontSize: {

@@ -17,7 +17,7 @@ export default function Technology() {
 					animate='visible'
 					variants={variants}
 				>
-					<h2 className='text-blue text-center xl:text-40 sm:text-36'>
+					<h2 className='text-blue text-center xl:text-40 s:text-36'>
 						Technology stack
 					</h2>
 					<TechnologySlider />

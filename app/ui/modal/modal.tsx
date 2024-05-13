@@ -66,8 +66,9 @@ export default function ContactModal() {
 	return (
 		<div className='w-full dialog-modal sm:max-w-[253px] s:max-w-[176px]'>
 			<button
-				className='w-full py-2.5 rounded-md bg-darkBlue text-white leading-snug text-24'
+				className='modal-button w-full py-2.5 rounded-md shadow-buttonShadow bg-darkBlue text-white leading-snug text-24 overflow-hidden cursor-pointer relative duration-300 ease-in-out'
 				onClick={handleOpen}
+				aria-label='Open contact modal'
 				type='button'
 			>
 				Contact me
@@ -79,18 +80,24 @@ export default function ContactModal() {
 				aria-describedby='modal-modal-description'
 			>
 				<Box className='s:max-w-[440px]' sx={style}>
-					<div className='flex flex-col justify-center items-center gap-[89px]'>
+					<div className='flex flex-col justify-center items-center lg:gap-[69px] s:gap-[29px]'>
 						<b
 							className='font-normal text-blue lg:text-60 s:text-40'
 							id='modal-modal-title'
 						>
 							Contact me
 						</b>
-						<ul className='w-full max-w-[400px] flex justify-between gap-5 flex-wrap'>
+						<ul className='w-full  flex justify-between xl:gap-5 md:max-[320px] s:max-w-[280px] s:gap-2 flex-wrap'>
 							{socialMeadiaData.map(({ id, href, icon, alt }) => (
-								<li className='' key={id}>
-									<a href={href}>
-										<Image src={icon} width={48} height={48} alt={alt} />
+								<li key={id}>
+									<a className='social-link' href={href}>
+										<Image
+											className='social-icon duration-300 ease-in-out'
+											src={icon}
+											width={48}
+											height={48}
+											alt={alt}
+										/>
 									</a>
 								</li>
 							))}
