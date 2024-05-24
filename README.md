@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-[Preview](www.rodiondev.space)
+[Preview](https://www.rodiondev.space/)
 
 First, run the development server:
 
