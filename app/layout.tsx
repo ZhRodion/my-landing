@@ -8,8 +8,8 @@ import './globals.css'
 const inter = Montserrat({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-	title: 'Rodion Fronted Developer Landing',
-	description: 'Developer landing page',
+	title: 'Rodion Frontend Developer Landing',
+	description: 'Rodion ReactJS Developer landing page',
 }
 
 export default function RootLayout({
