@@ -1,11 +1,13 @@
+import Contact from '@/contact/contact'
 import Hero from '@/hero/hero'
-import Technology from '@/techology/techonology'
+import Stack from '@/stack/stack'
 
 export default function MainPage() {
 	return (
-		<main className='main'>
+		<main>
 			<Hero />
-			<Technology />
+			<Stack />
+			<Contact />
 		</main>
 	)
 }

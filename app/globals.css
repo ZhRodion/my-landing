@@ -1,45 +1,178 @@
 @import 'tailwindcss';
 
-/* Tailwind 4 читает тему из CSS. Здесь подключаем прежний JS-конфиг,
-   чтобы кастомные цвета, брейкпоинты и размеры остались как были. */
-@config '../tailwind.config.ts';
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-токены. Tailwind 4 читает тему прямо отсюда,
+   отдельный tailwind.config.ts больше не нужен.
+   ───────────────────────────────────────────────────────────── */
+@theme {
+	--font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+	--font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+	--font-mono: var(--font-jetbrains), ui-monospace, monospace;
 
-@layer utilities {
-	.text-balance {
-		text-wrap: balance;
+	/* Почти-чёрная база с лёгким холодным уклоном */
+	--color-ink: #08080a;
+	--color-ink-elev: #101015;
+	--color-line: #1b1b22;
+	--color-line-strong: #2e2e38;
+
+	--color-fg: #f4f4f6;
+	--color-fg-dim: #9a9aa4;
+	--color-fg-faint: #585862;
+
+	/* Единственный акцент на весь сайт */
+	--color-accent: #4d8dff;
+
+	--ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+		-webkit-text-size-adjust: 100%;
+		/* Высота липкой шапки: без этого якоря уезжают под неё */
+		scroll-padding-top: 4rem;
+	}
+
+	body {
+		background-color: var(--color-ink);
+		color: var(--color-fg);
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		overflow-x: hidden;
+	}
+
+	::selection {
+		background-color: var(--color-accent);
+		color: var(--color-ink);
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 3px;
+		border-radius: 2px;
+	}
+
+	/* Холодное свечение за первым экраном — единственный источник «света» */
+	body::before {
+		content: '';
+		position: fixed;
+		inset: -20% 0 auto 0;
+		height: 70vh;
+		pointer-events: none;
+		z-index: 0;
+		background: radial-gradient(
+			60% 50% at 50% 0%,
+			rgb(77 141 255 / 0.13) 0%,
+			rgb(77 141 255 / 0.04) 45%,
+			transparent 72%
+		);
+	}
+
+	/* Плёночное зерно: снимает «пластиковость» больших тёмных плоскостей */
+	body::after {
+		content: '';
+		position: fixed;
+		inset: 0;
+		pointer-events: none;
+		z-index: 9999;
+		opacity: 0.032;
+		mix-blend-mode: overlay;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
+
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+		}
 	}
 }
 
-.container-wrapper {
-	@apply max-w-[1300px] w-full mx-auto relative lg:px-5 s:px-[15px];
+/* ─────────────────────────────────────────────────────────────
+   Появление контента. Только CSS: без JS страница не остаётся
+   пустой, если скрипты не доехали.
+   ───────────────────────────────────────────────────────────── */
+@layer components {
+	@keyframes reveal {
+		from {
+			opacity: 0;
+			transform: translateY(14px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	/* Первый экран — каскад сразу при загрузке */
+	.reveal {
+		animation: reveal 0.7s var(--ease-out-soft) both;
+		animation-delay: var(--reveal-delay, 0ms);
+	}
+
+	/* Ниже первого экрана — привязка к прокрутке там, где браузер умеет.
+	   Если не умеет, блок просто сразу виден: скрытого состояния нет. */
+	@supports (animation-timeline: view()) {
+		.reveal-scroll {
+			animation: reveal linear both;
+			animation-timeline: view();
+			animation-range: entry 5% cover 26%;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.reveal,
+		.reveal-scroll {
+			animation: none;
+			opacity: 1;
+			transform: none;
+		}
+	}
 }
 
-.visually-hidden {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	margin: -1px;
-	padding: 0;
-	border: 0;
-	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
-	white-space: nowrap;
-}
-
-@media (hover: hover) {
-	.modal-button:hover {
-		background-color: #2091f2;
+@layer components {
+	/* Единая колонка контента. В layer components, чтобы утилиты
+	   Tailwind могли её переопределить точечно. */
+	.shell {
+		width: 100%;
+		max-width: 1240px;
+		margin-inline: auto;
+		padding-inline: 20px;
 	}
 
-	.modal-button:active {
-		opacity: 0.5;
+	@media (min-width: 768px) {
+		.shell {
+			padding-inline: 40px;
+		}
 	}
 
-	.social-icon:hover {
-		opacity: 0.7;
+	/* Моношрифтовая микро-подпись — несущий элемент всей вёрстки */
+	.label {
+		font-family: var(--font-mono);
+		font-size: 11px;
+		line-height: 1;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		color: var(--color-fg-faint);
 	}
 
-	.social-icon:active {
-		opacity: 0.4;
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		border: 0;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
 	}
 }

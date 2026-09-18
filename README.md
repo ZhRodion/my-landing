@@ -66,17 +66,19 @@ pnpm lint && pnpm typecheck && pnpm build
 
 ```
 app/
-  layout.tsx          корневой layout: шрифт, метаданные, <Header/>
-  page.tsx            главная страница
-  globals.css         импорт Tailwind + глобальные утилиты
+  layout.tsx          подключение шрифтов, метаданные, каркас страницы
+  page.tsx            главная: Hero → Stack → Contact
+  globals.css         дизайн-токены (@theme), база, анимации появления
+  icon.svg            фавикон, его же Next отдаёт в <link rel="icon">
+  favicon.ico         тот же знак для браузеров без поддержки SVG-иконок
   ui/
-    header/           шапка с логотипом и кнопкой «Contact me»
-    hero/             первый экран: фото + текст о себе
-    techology/        секция «Technology stack»
-    technology-slider/ слайдер с логотипами технологий (Swiper)
-    modal/            модалка с контактами (MUI Modal)
+    header/           липкая шапка: логотип, навигация, статус
+    hero/             первый экран: имя, текст, фото, справка
+    stack/            сетка технологий
+    contact/          список каналов связи
+    footer/           нижняя строка
 public/
-  images/             растровые картинки (hero, логотипы стека)
+  images/             растровые картинки
   svgs/               иконки и логотип
 ```
 
@@ -85,29 +87,60 @@ public/
 В `tsconfig.json` настроен `@/*`, который резолвится сразу в несколько папок:
 
 ```ts
-import Hero from '@/hero/hero'        // app/ui/hero/hero
-import Logo from '@/logo.svg'         // public/svgs/logo.svg
-import Pic from '@/slider/git.png'    // public/images/slider/git.png
+import Hero from '@/hero/hero'          // app/ui/hero/hero
+import Logo from '@/logo.svg'           // public/svgs/logo.svg
+import Icon from '@/modal/tg.svg?url'   // public/svgs/modal/tg.svg
 ```
 
 ## Стек
 
 - **Next.js 16** (App Router, Turbopack) + **React 19**
 - **TypeScript**
-- **Tailwind CSS 4** — вся вёрстка
-- **MUI 9** + Emotion — только модалка контактов
-- **Framer Motion** — анимации появления секций
-- **Swiper** — слайдер технологий
+- **Tailwind CSS 4** — вся вёрстка и дизайн-токены
+
+Прод-зависимостей ровно три: `next`, `react`, `react-dom`. Анимации,
+сетки и эффекты сделаны на CSS, без UI-библиотек и рантайм-зависимостей.
+
+## Дизайн
+
+Тёмная тема, один холодный акцент, моноширинные подписи.
+Все токены — в блоке `@theme` в `app/globals.css`:
+
+| Группа | Токены |
+| --- | --- |
+| Фон | `--color-ink`, `--color-ink-elev` |
+| Линии | `--color-line`, `--color-line-strong` |
+| Текст | `--color-fg`, `--color-fg-dim`, `--color-fg-faint` |
+| Акцент | `--color-accent` |
+| Шрифты | `--font-display`, `--font-sans`, `--font-mono` |
+
+Отдельного `tailwind.config.ts` нет — в Tailwind 4 тема описывается прямо в CSS.
+Брейкпоинты стандартные, кастомных нет.
+
+Шрифты грузятся через `next/font/google`: Bricolage Grotesque (заголовки),
+Instrument Sans (текст), JetBrains Mono (подписи).
 
 ## Что стоит знать по коду
+
+### Появление контента сделано на CSS, а не на JS
+
+Классы `.reveal` (каскад при загрузке) и `.reveal-scroll` (привязка к прокрутке
+через `animation-timeline: view()`) живут в `app/globals.css`.
+
+Это не стилистический выбор, а требование: при анимациях на JS страница
+остаётся пустой, если скрипты не доехали. У `.reveal-scroll` нет скрытого
+состояния по умолчанию — там, где браузер не умеет `animation-timeline`,
+блок просто сразу виден.
+
+Оба класса отключаются при `prefers-reduced-motion`.
 
 ### Два режима импорта SVG
 
 Настроено в `next.config.mjs` через правила Turbopack:
 
 ```tsx
-import Logo from '@/logo.svg'          // React-компонент (SVGR), инлайнится в разметку
-import iconUrl from '@/modal/tg.svg?url' // строка с URL файла, для <Image src={iconUrl} />
+import Logo from '@/logo.svg'           // React-компонент (SVGR), инлайнится в разметку
+import iconUrl from '@/modal/tg.svg?url' // URL файла, для <Image src={iconUrl} />
 ```
 
 Суффикс `?url` — не украшение: без него SVG превратится в компонент,
@@ -116,15 +149,13 @@ import iconUrl from '@/modal/tg.svg?url' // строка с URL файла, дл
 Те же правила продублированы для webpack, поэтому запасной режим
 `pnpm build --webpack` (на случай бага в Turbopack) тоже рабочий.
 
-### Тема Tailwind
+### Логотип и иконки перекрашиваются фильтром
 
-Проект на Tailwind 4, но тема (цвета, брейкпоинты, размеры шрифтов)
-пока описана по-старому — в `tailwind.config.ts`, который подключается
-из `app/globals.css` директивой `@config`. Это поддерживаемый способ,
-но при случае тему можно перенести в CSS-блок `@theme` и удалить конфиг.
-
-Обрати внимание на нестандартные брейкпоинты: добавлен `s: 320px`,
-а `lg` переопределён на `1023px` (вместо дефолтных 1024px).
+Исходники нарисованы в фирменных тёмно-синих и на почти-чёрном фоне
+были бы не видны. Вместо правки SVG применяется `brightness-0 invert` —
+`brightness(0)` гасит любые цвета в чёрный, `invert` поднимает результат
+в белый. Работает независимо от того, что внутри файла: заливки, градиенты
+или обводки.
 
 ### Линтер
 
