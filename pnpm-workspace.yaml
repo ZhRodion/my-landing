@@ -1,0 +1,4 @@
+# Нативные пакеты, которым разрешено выполнять postinstall-скрипты.
+# Без этого списка pnpm блокирует сборку и падает с ERR_PNPM_IGNORED_BUILDS.
+allowBuilds:
+  unrs-resolver: true

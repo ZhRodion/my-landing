@@ -15,11 +15,11 @@ import 'swiper/css/pagination'
 import { Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
-import Image from 'next/image'
+import Image, { type StaticImageData } from 'next/image'
 
 interface swiperSlidesProps {
 	id: number
-	picSrc: any
+	picSrc: StaticImageData
 	picAlt: string
 }
 

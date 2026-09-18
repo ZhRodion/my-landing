@@ -1,33 +1,50 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack(config) {
-    // Grab the existing rule that handles SVG imports
-    const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.('.svg'),
-    )
+	// Основной режим Next 16. Два варианта импорта SVG:
+	//   import Icon from './i.svg'      → React-компонент через SVGR
+	//   import url  from './i.svg?url'  → URL файла, годится для <Image src={url} />
+	turbopack: {
+		rules: {
+			'*.svg': [
+				{
+					condition: { query: '?url' },
+					type: 'asset',
+				},
+				{
+					condition: { not: { query: '?url' } },
+					loaders: ['@svgr/webpack'],
+					as: '*.js',
+				},
+			],
+		},
+	},
 
-    config.module.rules.push(
-      // Reapply the existing rule, but only for svg imports ending in ?url
-      {
-        ...fileLoaderRule,
-        test: /\.svg$/i,
-        resourceQuery: /url/, // *.svg?url
-      },
-      // Convert all other *.svg imports to React components
-      {
-        test: /\.svg$/i,
-        issuer: fileLoaderRule.issuer,
-        resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] }, // exclude if *.svg?url
-        use: ['@svgr/webpack'],
-      },
-    )
+	// То же самое для запасного режима `next build --webpack`.
+	webpack(config) {
+		const fileLoaderRule = config.module.rules.find(rule =>
+			rule.test?.test?.('.svg'),
+		)
 
-    // Modify the file loader rule to ignore *.svg, since we have it handled now.
-    fileLoaderRule.exclude = /\.svg$/i
+		config.module.rules.push(
+			// Штатное правило Next, но только для импортов с ?url
+			{
+				...fileLoaderRule,
+				test: /\.svg$/i,
+				resourceQuery: /url/,
+			},
+			// Все остальные .svg — в React-компоненты
+			{
+				test: /\.svg$/i,
+				issuer: fileLoaderRule.issuer,
+				resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] },
+				use: ['@svgr/webpack'],
+			},
+		)
 
-    return config
-  },
+		fileLoaderRule.exclude = /\.svg$/i
 
+		return config
+	},
 }
 
 export default nextConfig

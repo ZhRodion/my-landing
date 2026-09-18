@@ -1,6 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/* Tailwind 4 читает тему из CSS. Здесь подключаем прежний JS-конфиг,
+   чтобы кастомные цвета, брейкпоинты и размеры остались как были. */
+@config '../tailwind.config.ts';
 
 @layer utilities {
 	.text-balance {

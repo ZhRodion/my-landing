@@ -5,6 +5,9 @@ declare module '*.svg' {
 }
 
 declare module '*.svg?url' {
-	const content: any
+	// Turbopack отдаёт такой импорт строкой с URL, webpack — объектом StaticImageData.
+	// Оба варианта принимает <Image src={...} />.
+	import { StaticImageData } from 'next/image'
+	const content: string | StaticImageData
 	export default content
 }

@@ -1,6 +1,5 @@
 import Header from '@/header/header'
-import type { Metadata } from 'next'
-import Head from 'next/head'
+import type { Metadata, Viewport } from 'next'
 
 import { Montserrat } from 'next/font/google'
 import './globals.css'
@@ -12,6 +11,10 @@ export const metadata: Metadata = {
 	description: 'Rodion ReactJS Developer landing page',
 }
 
+export const viewport: Viewport = {
+	themeColor: '#2091F2',
+}
+
 export default function RootLayout({
 	children,
 }: Readonly<{
@@ -19,9 +22,6 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en'>
-			<Head>
-				<meta name='theme-color' content='#2091F2'></meta>
-			</Head>
 			<body className={inter.className}>
 				<Header />
 				{children}

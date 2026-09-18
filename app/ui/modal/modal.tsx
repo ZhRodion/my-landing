@@ -10,10 +10,10 @@ import GitHubIcon from '@/modal/gh.svg?url'
 import TelegramIcon from '@/modal/tg.svg?url'
 import WhatsappIcon from '@/modal/wa.svg?url'
 
-import Image from 'next/image'
+import Image, { type ImageProps } from 'next/image'
 
 const style = {
-	position: 'absolute' as 'absolute',
+	position: 'absolute' as const,
 	top: '50%',
 	left: '50%',
 	transform: 'translate(-50%, -50%)',
@@ -27,7 +27,7 @@ const style = {
 interface socialMediaProps {
 	id: number
 	href: string
-	icon: any
+	icon: ImageProps['src']
 	alt: string
 }
 
